@@ -7,55 +7,66 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.geom.RoundRectangle2D;
 
 public class UI extends JFrame {
-    public UI() {
-        setTitle("Minesweeper");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Create a label
-        //JLabel label = new JLabel("Hello, world!");
-        //getContentPane().add(label);
+    public int numberOfCells = 200;
 
-        /*
-        JButton button = new JButton("Click me");
-        button.setUI(new RoundedButtonUI());
-        getContentPane().add(button);
-        */
+
+    public UI() {
+        JFrame frame = new JFrame();
+        JFrame frame2 = new JFrame();
+        // Customising the main frame
+        frame.setTitle("Minesweeper");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setResizable(false);
+        //frame.setLayout(new FlowLayout());
+        //frame.setLocationRelativeTo(null);
+        //frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         
-        for (int i = 0; i < 100; i++) {
-            //.setAlignmentX(Component.CENTER_ALIGNMENT);
-            JButton button = ButtonFactory.createButton();
-            button.setAlignmentX(Component.CENTER_ALIGNMENT);
-            getContentPane().add(button);
+        JPanel scorePanel = new JPanel();
+        scorePanel.setLayout(new FlowLayout());
+        scorePanel.setSize(500, 100);
+        frame2.add(scorePanel);
+        
+        JLabel elapsedTimeLabel = new JLabel("Hello, world!");
+        scorePanel.add(elapsedTimeLabel);
+
+        JLabel remainingMines = new JLabel("Hello, world!");
+        scorePanel.add(remainingMines);
+
+        //create panel to hold cell buttons
+        JPanel buttonFrame = new JPanel();
+        buttonFrame.setLayout(new GridLayout(0, numberOfCells/10));
+        buttonFrame.setSize(500,500);
+        frame.add(buttonFrame);
+        
+        // creating cell buttons
+        for (int i = 0; i < numberOfCells; i++) {
+            JButton button = ButtonFactory.createButton(Integer.toString(i+1));
+            buttonFrame.add(button);
         }
-        
-        // Set the layout manager to remove gaps between buttons
-        setLayout(new FlowLayout(5, 0,0));
-        //setLayout(new BoxLayout(BoxLayout.Y_AXIS));
-        setLocationRelativeTo(null);
-        setSize(550, 550);
-        setVisible(true);
+        frame.setSize(500,600);
     }
 }
 
 class ButtonFactory {
     public boolean flagged = false;
     public boolean isMineCell = false;
+    public boolean revealed = false;
 
-    public static JButton createButton() {
-        JButton button = new JButton();
+    public static JButton createButton(String text) {
+        JButton button = new JButton(text);
 
         //Set the button size to 50 by 50
         button.setPreferredSize(new Dimension(50, 50));
+        //button.setSize(50, 50);
 
         button.setBackground(Color.LIGHT_GRAY);
         button.setForeground(Color.WHITE);
-        //button.setBorder(new LineBorder(Color.BLACK));
 
-        // Set the button font
+        button.setMargin(new Insets(0, 0, 0, 0));
         button.setFont(new Font("Arial", Font.PLAIN, 14));
-
-        // Add a margin to the button
-        //button.setMargin(new Insets(5, 5, 5, 5));
-
+        
         // Add an action listener to the button
         button.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
